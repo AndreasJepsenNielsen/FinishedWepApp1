@@ -8,6 +8,14 @@ namespace WebApplication1.Models
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [Required]
+        [Display(Name = "Kørekort")]
+        public string DrivingLicense { get; set; }
+
+        [Required]
+        [StringLength(70)]
+        [Display(Name = "Telefonnummer")]
+        public string Phone { get; set; }   
     }
 
     public class ExternalLoginListViewModel
@@ -65,6 +73,9 @@ namespace WebApplication1.Models
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Kørekort")]
+        public string DrivingLicense { get; set; }  
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -79,6 +90,11 @@ namespace WebApplication1.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [StringLength(75)]
+        [Display(Name = "Telefonnummer")]
+        public string Phone { get; set; }   
     }
 
     public class ResetPasswordViewModel

@@ -1,0 +1,79 @@
+﻿@model IEnumerable<WebApplication1.Models.Movie>
+
+@{
+    ViewBag.Title = "Movies";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Film</h2>
+<p>
+    @Html.ActionLink("Ny Film", "New", "Movies", null,new {@class = "btn btn-primary"}) @*Laver en button som referer til Actionen New og controlleren Movies*@
+</p>
+<table id="movies" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Film</th>
+            <th>Genre</th>
+            <th>Fjern</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            var table = $("#movies").DataTable(
+                {
+                    ajax: {
+                        url: "/api/movies",
+                        dataSrc: ""
+                    },
+                    columns: [
+                        {
+                            data: "name",
+                            render: function(data, type, movie) {
+                                return "<a href='/movies/edit/" + movie.id + "'>" + movie.name + "</a>";
+                            }
+
+                        },
+                        {
+                            data: "genre.name"
+                        },
+                        {
+                            data: "id",
+                            render: function(data) {
+                                return "<button class ='btn-link js-delete' data-movies-id=" +
+                                    data +
+                                    ">Fjern</button>";
+                            }
+                        }
+                    ]
+                });
+
+            $("#movies").on("click",
+                ".js-delete",
+                function() {
+
+                    var button = $(this);
+
+                    bootbox.confirm("Er du sikker på at du vil fjerne denne film?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/movies/" + button.attr("data-movies-id"),
+                                    method: "DELETE",
+                                    success: function() {
+                                        table.row(button.parents("tr")).remove().draw();
+                                    }
+                                });
+                            }
+                        });
+
+                }
+            );
+        });
+    </script>
+}
